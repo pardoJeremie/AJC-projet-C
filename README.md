@@ -5,7 +5,6 @@
 On souhaite réaliser un programme d'encryptage et décryptage d’un fichier texte. Pour cela, nous utiliserons l'algorithme du « perroquet ». Cet algorithme repose sur un mot (le perroquet) qui permet de crypter en calculant la différence ASCII caractère par caractère.
 
 *Exemple :*
-| Description				 | valeur					 |
 |:---------------------------|:--------------------------|
 | Texte à crypter 			 | Faq 						 |
 | Perroquet					 | ab 						 | 
