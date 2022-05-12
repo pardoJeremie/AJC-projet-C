@@ -285,7 +285,7 @@ int decryt_to_file (char* file_to_decrypt_to, char* crypted_file) {
 }
 
 void change_parrot_phrase (char* phrase) {
-    //write crypted file
+    //write the new parrot phrase
     FILE *f = NULL;
     f = fopen("perroq.def","w+");
         
@@ -294,6 +294,7 @@ void change_parrot_phrase (char* phrase) {
         exit(EXIT_FAILURE);
     }
     
+    fwrite(phrase,sizeof(phrase), 1, f);// write into the file
     
     if(fclose(f) == EOF){
         printf("file perroq.def was not closed properly.\n");
