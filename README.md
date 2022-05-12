@@ -12,7 +12,7 @@ On souhaite réaliser un programme d'encryptage et décryptage d’un fichier te
 | Encryptage en calcul ascii |('F'-'a')('a'-'b')('q'-'a')|
 
 Le programme utilisera trois fichiers:
-* "peroq.def", fichier contenant le mot (ou la phrase) du « perroquet ».
+* "perroq.def", fichier contenant le mot (ou la phrase) du « perroquet ».
 * "fichier.txt", fichier contenant le texte à crypté. Ce fichier devra être supprimé après la réalisation de l'opération de cryptage.
 * "dest.crt", fichier contenant le texte crypté.
 
