@@ -9,7 +9,7 @@
 #include "function.h"
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    printf("Hello, World!\n");
+    // initialisation de la boucle du menu de selection
+    while (menu());
     return 0;
 }

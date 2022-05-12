@@ -9,5 +9,5 @@
 #define function_h
 
 #include <stdio.h>
-void menu (void);
+int menu (void);
 #endif /* function_h */
