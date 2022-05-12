@@ -11,8 +11,9 @@
 
 #define Path_Size 500
 #define Text_Size 1001
-// /Users/pardojeremie/Desktop/AJC Formation pour Thales/formation cours/C/program/AJC projet C/AJC projet C/le_langage_C.md
-
+// /Users/pardojeremie/Desktop/AJC Formation pour Thales/formation cours/C/program/AJC projet C/AJC projet C/le_langage_C.txt
+//fgetc
+//fgets
 
 int confirmation(void) {// Ask the user for a confirmation
     char c;
@@ -87,7 +88,7 @@ int menu (void) {
             fflush(stdin);
             fgets(path_b,Path_Size, stdin);
             
-            printf("Ecriver le chemain du fichier à décrypter: ");
+            printf("Ecriver le chemain du fichier cible: ");
             fflush(stdin);
             fgets(path_a,Path_Size, stdin);
             
@@ -125,7 +126,6 @@ int menu (void) {
     return 1;//return 1 to indicate user did not ask to quit the program
 }
 
-
 int encrypt_file (char* file_to_encrypt, char* new_crypted_file) {
     char parrot[Text_Size],// contains the values of the parrot phrase
     text[Text_Size];// contains the text to decrypt or crypt
@@ -144,7 +144,7 @@ int encrypt_file (char* file_to_encrypt, char* new_crypted_file) {
     fread(parrot,sizeof(parrot), 1, f);
     parrot_size = strlen(parrot);
     
-    if(fclose(f) == EOF){
+    if(fclose(f) == EOF) {
         printf("file perroq.def was not closed properly.\n");
         exit(EXIT_FAILURE);
     }
@@ -157,15 +157,20 @@ int encrypt_file (char* file_to_encrypt, char* new_crypted_file) {
         return 0;
     }
     
-    fread(text,sizeof(text), 1, f);
-    text_size = strlen(text);
-    
+   fread(text,sizeof(text), 1, f);
+    text_size = strlen(text)+1;// +1 to encrypt '\0'
     if(fclose(f) == EOF){
         printf("file %s was not closed properly.\n",file_to_encrypt);
         exit(EXIT_FAILURE);
     }
     
     //crypte text
+    int j = 0;
+    for (int i = 0; i < text_size; i++){
+        text[i] -= parrot[j++];
+        if (j >= parrot_size)
+            j = 0;
+    }
     
     
     //write crypted file
@@ -208,7 +213,13 @@ int encrypt_string (char* text, char* new_crypted_file) {
     }
     
     // crypte text
-    text_size = strlen (text);
+    text_size = strlen (text)+1;// +1 to encrypt '\0'
+    int j = 0;
+    for (int i = 0; i < text_size; i++){
+        text[i] -= parrot[j++];
+        if (j >= parrot_size)
+            j = 0;
+    }
     
     //write crypted file
     f = fopen(new_crypted_file,"w+");
@@ -231,7 +242,7 @@ int encrypt_string (char* text, char* new_crypted_file) {
 int decryt_to_printf (char* crypted_file) {
     char parrot[Text_Size],// contains the values of the parrot phrase
     text[Text_Size];// contains the text to decrypt or crypt
-    unsigned long parrot_size = 0, text_size = 0;//size of parrot phrase
+    unsigned long parrot_size = 0;//size of parrot phrase
     
     //read parrot.def
     FILE *f = NULL;
@@ -259,48 +270,6 @@ int decryt_to_printf (char* crypted_file) {
     }
     
     fread(text,sizeof(text), 1, f);
-    text_size = strlen(text);
-    
-    if(fclose(f) == EOF){
-        printf("file %s was not closed properly.\n",crypted_file);
-        exit(EXIT_FAILURE);
-    }
-    return 1;
-    
-}
-
-int decryt_to_file (char* file_to_decrypt_to, char* crypted_file) {
-    char parrot[Text_Size],// contains the values of the parrot phrase
-    text[Text_Size];// contains the text to decrypt or crypt
-    unsigned long parrot_size = 0, text_size = 0;//size of parrot phrase
-    
-    //read parrot.def
-    FILE *f = NULL;
-    f = fopen("perroq.def","r");
-        
-    if(f == NULL) {
-        printf("file perroq.def did not open properly.\n Are you sure the file exists?\n");
-        return 0;
-    }
-    
-    fread(parrot,sizeof(parrot), 1, f);
-    parrot_size = strlen(parrot);
-    
-    if(fclose(f) == EOF){
-        printf("file perroq.def was not closed properly.\n");
-        exit(EXIT_FAILURE);
-    }
-    
-    //read crypted file
-    f = fopen(crypted_file,"r");
-        
-    if(f == NULL) {
-        printf("file %s did not open properly.\n Are you sure the file exists?\n",crypted_file);
-        return 0;
-    }
-    
-    fread(text,sizeof(text), 1, f);
-    text_size = strlen(text);
     
     if(fclose(f) == EOF){
         printf("file %s was not closed properly.\n",crypted_file);
@@ -308,7 +277,66 @@ int decryt_to_file (char* file_to_decrypt_to, char* crypted_file) {
     }
     
     //decrypte text
+    int j = 0;
+    for (int i = 0; i < Text_Size; i++){
+        text[i] += parrot[j++];
+        if(text[i] == '\0')
+            break;
+        printf("%c",text[i]);
+        if (j >= parrot_size)
+            j = 0;
+    }
+    printf("\n");
     
+    return 1;
+}
+
+int decryt_to_file (char* file_to_decrypt_to, char* crypted_file) {
+    char parrot[Text_Size],// contains the values of the parrot phrase
+    text[Text_Size];// contains the text to decrypt or crypt
+    unsigned long parrot_size = 0;//size of parrot phrase
+    
+    //read parrot.def
+    FILE *f = NULL;
+    f = fopen("perroq.def","r");
+        
+    if(f == NULL) {
+        printf("file perroq.def did not open properly.\n Are you sure the file exists?\n");
+        return 0;
+    }
+    
+    fread(parrot,sizeof(parrot), 1, f);
+    parrot_size = strlen(parrot);
+    
+    if(fclose(f) == EOF){
+        printf("file perroq.def was not closed properly.\n");
+        exit(EXIT_FAILURE);
+    }
+    
+    //read crypted file
+    f = fopen(crypted_file,"r");
+        
+    if(f == NULL) {
+        printf("file %s did not open properly.\n Are you sure the file exists?\n",crypted_file);
+        return 0;
+    }
+    
+    fread(text,sizeof(text), 1, f);
+    
+    if(fclose(f) == EOF){
+        printf("file %s was not closed properly.\n",crypted_file);
+        exit(EXIT_FAILURE);
+    }
+    
+    //decrypte text
+    int j = 0;
+    for (int i = 0; i < Text_Size; i++){
+        text[i] += parrot[j++];
+        if(text[i] == '\0')
+            break;
+        if (j >= parrot_size)
+            j = 0;
+    }
     
     //write decrypted file
     f = fopen(file_to_decrypt_to,"w+");
@@ -318,7 +346,7 @@ int decryt_to_file (char* file_to_decrypt_to, char* crypted_file) {
         exit(EXIT_FAILURE);
     }
     
-    fwrite(text,sizeof(char), text_size, f);// write into the file
+    fwrite(text,sizeof(char), strlen(text), f);// write into the file
     
     if(fclose(f) == EOF){
         printf("file %s was not closed properly.\n",file_to_decrypt_to);
