@@ -6,10 +6,13 @@
 //
 
 #include <stdlib.h>
+#include <string.h>
 #include "function.h"
 
-#define Path_Size 50
-#define Text_Size 101
+#define Path_Size 500
+#define Text_Size 1001
+// /Users/pardojeremie/Desktop/AJC Formation pour Thales/formation cours/C/program/AJC projet C/AJC projet C/function.txt
+
 
 int confirmation(void) {// Ask the user for a confirmation
     char c;
@@ -49,6 +52,8 @@ int menu (void) {
             fflush(stdin);
             fgets(path_b,Path_Size, stdin);
             
+            path_a[strcspn(path_a, "\r\n")] = '\0'; //delet the '\n' character at the end of path_b introduced by fgets
+            path_b[strcspn(path_b, "\r\n")] = '\0'; //delet the '\n' character at the end of path_b introduced by fgets
             if(encrypt_file (path_a,path_b))
                 printf("Fichier encrypter.\n");
             
@@ -58,10 +63,12 @@ int menu (void) {
             fflush(stdin);
             fgets(path_b,Path_Size, stdin);
             
-            printf("\n Ecriver le texte (500 caractère max): ");
+            printf("\n Ecriver le texte (%d caractère max): ", Text_Size-1);
             fflush(stdin);
             fgets(text,Text_Size, stdin);
             
+            text[strcspn(text, "\r\n")] = '\0'; //delet the '\n' character at the end of text introduced by fgets
+            path_b[strcspn(path_b, "\r\n")] = '\0'; //delet the '\n' character at the end of path_b introduced by fgets
             if(encrypt_string (text,path_b))
                 printf("Texte encrypter.\n");
             
@@ -71,6 +78,7 @@ int menu (void) {
             fflush(stdin);
             fgets(path_b,Path_Size, stdin);
             
+            path_b[strcspn(path_b, "\r\n")] = '\0'; //delet the '\n' character at the end of path_b introduced by fgets
             if(decryt_to_printf(path_b))
                 printf("Texte decrypter.\n");
             break;
@@ -83,6 +91,8 @@ int menu (void) {
             fflush(stdin);
             fgets(path_a,Path_Size, stdin);
             
+            path_a[strcspn(path_a, "\r\n")] = '\0'; //delet the '\n' character at the end of path_b introduced by fgets
+            path_b[strcspn(path_b, "\r\n")] = '\0'; //delet the '\n' character at the end of path_b introduced by fgets
             if(decryt_to_file(path_a, path_b))
                 printf("Texte decrypter.\n");
             
@@ -91,10 +101,11 @@ int menu (void) {
             printf("Attention, changer la phrase perroquet vous empêchera de lire l'ensemble des fichiers encrypter avec la phrase actuelle.\n");
             
             if(confirmation()) {
-                printf("Ecriver la nouvelle phrase parrot (500 caractère max): ");
+                printf("Ecriver la nouvelle phrase parrot (%d caractère max): ",Text_Size-1);
                 fflush(stdin);
                 fgets(text,Text_Size, stdin);
                 
+                text[strcspn(text, "\r\n")] = '\0'; //delet the '\n' character at the end of text introduced by fgets
                 change_parrot_phrase(text);
             }
             
@@ -118,6 +129,7 @@ int menu (void) {
 int encrypt_file (char* file_to_encrypt, char* new_crypted_file) {
     //read file to encrypt
     FILE *f = NULL;
+    
     f = fopen(file_to_encrypt,"r");
         
     if(f == NULL) {
