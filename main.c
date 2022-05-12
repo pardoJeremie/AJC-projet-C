@@ -10,6 +10,6 @@
 
 int main(int argc, const char * argv[]) {
     // initialisation de la boucle du menu de selection
-    while (menu());
+    while (menu());//if menu() return 0, quit the loop and stop the program
     return 0;
 }
