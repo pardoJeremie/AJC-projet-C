@@ -274,7 +274,7 @@ int decryt_to_printf (char* crypted_file) {
     
     //decrypte text
     int j = 0;
-    for (int i = 0; i < TEXT_SIZE; i++){
+    for (int i = 0; i < TEXT_SIZE - 1 ; i++){
         text[i] += parrot[j++];
         if(text[i] == '\0')//if a '\0' character is decoded
             break;
@@ -324,14 +324,14 @@ int decryt_to_file (char* file_to_decrypt_to, char* crypted_file) {
     
     //decrypte text
     int j = 0;
-    for (int i = 0; i < TEXT_SIZE; i++){
+    for (int i = 0; i < TEXT_SIZE - 1; i++){
         text[i] += parrot[j++];
         if(text[i] == '\0')//if a '\0' character is decoded
             break;
         if (j >= parrot_size)
             j = 0;
     }
-    
+    text[TEXT_SIZE - 1] = '\0';// set last character to '\0' in the case where the text input is bigger than TEXT_SIZE
     //write decrypted file
     f = fopen(file_to_decrypt_to,"w+");//open file
     if(f == NULL) {
